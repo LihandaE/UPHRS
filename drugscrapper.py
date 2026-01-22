@@ -1,0 +1,1 @@
+# Contains how one can scrappe any drug information
