@@ -1,23 +1,28 @@
+import uuid
 from database import get_connection
 
 def register_patient(patient):
-    conn=get_connection()
-    cur= conn.cursor()
+    conn = get_connection()
+    cur = conn.cursor()
+
+    
+    patient_id = str(uuid.uuid1())
 
     cur.execute(
         "INSERT INTO patients VALUES (?, ?, ?, ?)",
-        (patient.id, patient.name, patient.dob, patient.gender)
+        (patient_id, patient.name, patient.dob, patient.gender)
     )
 
     cur.execute(
         "INSERT INTO consent VALUES (?, ?)",
-        (patient.id, 0)
+        (patient_id, 0)
     )
 
     conn.commit()
     conn.close()
-    return patient.id
-
+    
+    
+    return patient_id
 
 def grant_consent(patient_id):
     conn = get_connection()
@@ -56,4 +61,5 @@ def get_patient_history(patient_id):
 
     return {
         "medical_records": records,
-        "medications": meds}
+        "medications": meds
+    }
